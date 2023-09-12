@@ -1,0 +1,8 @@
+config.json
+images/
+errors/
+node_modules/
+tmp/
+logs.txt
+src/imgData.json
+src/imgQueue.json

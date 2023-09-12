@@ -1,0 +1,31 @@
+{
+  "name": "minecraftimagebot",
+  "version": "1.0.0",
+  "description": "Convert images to Minecraft images",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kolton12O",
+  "license": "ISC",
+  "dependencies": {
+    "@discordjs/builders": "^0.13.0-dev.1647259738.2297c2b",
+    "@discordjs/rest": "^0.4.0-dev.1647259762.2297c2b",
+    "abort-controller": "^3.0.0",
+    "axios": "^0.26.1",
+    "console-stamp": "^3.1.2",
+    "cron": "^1.8.2",
+    "discord-api-types": "^0.29.0",
+    "discord.js": "^14.0.0-dev.1647259751.2297c2b",
+    "form-data": "^4.0.0",
+    "fs-extra": "^11.1.0",
+    "http-status-codes": "^2.2.0",
+    "image-js": "^0.35.3",
+    "nearest-color": "^0.4.4",
+    "node-fetch": "^2.6.9",
+    "os-utils": "^0.0.14",
+    "pidusage": "^3.0.2",
+    "prom-client": "^14.2.0",
+    "topgg-autoposter": "^2.0.1"
+  }
+}
