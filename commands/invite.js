@@ -5,7 +5,7 @@ const config = require("../config.json");
 
 async function main(interaction, client) {
     try {
-        await interactionReply({interaction: interaction, description: `You can invite me using this link: [Support](${config.inviteURL})`});
+        await interactionReply({interaction: interaction, description: `You can invite me using this link: [Invite](${config.inviteURL})`});
     } catch(e) {
         throw e;
     }
