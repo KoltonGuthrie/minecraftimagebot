@@ -187,25 +187,25 @@ function getFilesizeInBytes(filename) {
 
 function checkQueue(interaction, delayTimer) {
     try {
-        queue = JSON.parse(fs.readFileSync(`${__dirname}/../src/imgQueue.json`));
-        const guildID = interaction.guild.id;
+        let queue = JSON.parse(fs.readFileSync(`${__dirname}/../src/imgQueue.json`));
+        const userID = interaction.user.id;
 
-        if (queue[guildID] > new Date().getTime()) {
-            h = Math.floor((queue[guildID] - new Date().getTime()) / 1000 / 60 / 60);
-            m = Math.floor(((queue[guildID] - new Date().getTime()) / 1000 / 60 / 60 - h) * 60);
-            s = Math.floor((((queue[guildID] - new Date().getTime()) / 1000 / 60 / 60 - h) * 60 - m) * 60);
+        if (queue[userID] > new Date().getTime()) {
+            h = Math.floor((queue[userID] - new Date().getTime()) / 1000 / 60 / 60);
+            m = Math.floor(((queue[userID] - new Date().getTime()) / 1000 / 60 / 60 - h) * 60);
+            s = Math.floor((((queue[userID] - new Date().getTime()) / 1000 / 60 / 60 - h) * 60 - m) * 60);
             time = `${m > 0 ? m + " minutes and " : ""}${s} seconds`;
 
             interactionReply({interaction:interaction, description: `:x: This is on cooldown for ${time}.`})
             return 1;
 
         } else {
-            queue[guildID] = new Date().getTime() + delayTimer;
+            queue[userID] = new Date().getTime() + delayTimer;
         }
 
-        if (typeof queue[guildID] == "undefined")
+        if (typeof queue[userID] == "undefined")
         
-        queue[guildID] = new Date().getTime() + delayTimer;
+        queue[userID] = new Date().getTime() + delayTimer;
 
         fs.writeFileSync(`${__dirname}/../src/imgQueue.json`,JSON.stringify(queue));
 
