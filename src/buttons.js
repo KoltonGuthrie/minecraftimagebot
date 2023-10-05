@@ -69,7 +69,7 @@ async function Delete(interaction, client, admin = false) {
 
         const json = JSON.parse(fs.readFileSync(`${__dirname}/imgData.json`));
 
-        const el = json[interaction.message.content.toLowerCase().replace(/\-/g, "")];
+        const el = json[id];
 
         if(!json[id]) return await interactionReply({interaction: interaction, description: "Unable to find image...", ephemeral: true});
 
