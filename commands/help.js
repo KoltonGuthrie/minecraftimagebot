@@ -11,20 +11,23 @@ async function main(interaction, client) {
     try {
         await interactionReply({interaction: interaction, description: `
         [Our Webpage](${config.webpageURL}) | [Invite Me](${config.inviteURL})
-        \n\n<> - required, [] - optional
-        \n\n**Commands:**
-        \n/img file <FILE> [low | average | high] - *Main command (Upload with file)*
-        \n/img url <LINK> [low | average | high] - *Main command (Upload with link)*
-        \n/download <ID> - *View your image without compression*
-        \n/remove <ID> - *Remove image*\n/info <ID> - *View info of image (used blocks)*
-        \n/help - *Shows this page*\n\n**Info:**\nThere are cooldowns whenever a picture is created.
-        \n/support - *Get the support link for me*
-        \n/invite - *Get the invite link for me*
-        \n\n**Cooldowns:**
-        \nLow - **10** seconds
-        \nAverage - **20** seconds
-        \nHigh - **30** seconds
-        \n\n[Rules](${config.rulesURL}) | [TOS](${config.tosURL}) | [Support](${config.supportURL})`})
+        \n<> - required, [] - optional
+        \n**Commands:**
+        **/img file <FILE>** [low | average | high] - *Main command (Upload with file)*
+        **/img url <LINK>** [low | average | high] - *Main command (Upload with link)*
+        **/download <ID>** - *View your image without compression*
+        **/remove <ID>** - *Remove image*
+        **/info <ID>** - *View info of image (used blocks)*
+        **/support** - *Get the support link for me*
+        **/invite** - *Get the invite link for me*
+        **/help** - *Shows this page*
+        \n**Info:**
+        There are cooldowns whenever a picture is created.
+        \n**Cooldowns:**
+        Low - **10** seconds
+        Average - **20** seconds
+        High - **30** seconds
+        \n[Rules](${config.rulesURL}) | [TOS](${config.tosURL}) | [Support](${config.supportURL})`})
     } catch(e) {
         throw e;
     }
