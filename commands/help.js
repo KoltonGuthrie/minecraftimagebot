@@ -18,6 +18,8 @@ async function main(interaction, client) {
         \n/download <ID> - *View your image without compression*
         \n/remove <ID> - *Remove image*\n/info <ID> - *View info of image (used blocks)*
         \n/help - *Shows this page*\n\n**Info:**\nThere are cooldowns whenever a picture is created.
+        \n/support - *Get the support link for me*
+        \n/invite - *Get the invite link for me*
         \n\n**Cooldowns:**
         \nLow - **10** seconds
         \nAverage - **20** seconds
