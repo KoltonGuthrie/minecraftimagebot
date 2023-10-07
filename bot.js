@@ -4,7 +4,7 @@ const fs = require("fs");
 const { interactionReply } = require(`${__dirname}/src/embed.js`);
 const errorHandler = require(`${__dirname}/src/error.js`);
 const axios = require("axios");
-const { ImageBan, ImageWarn, ImageDelete, ImageInfo } = require(`${__dirname}/src/buttons.js`);
+const { ImageBan, ImageWarn, ImageDelete, ImageInfo, ImageQuestion } = require(`${__dirname}/src/buttons.js`);
 const { Options, Client, Collection, GatewayIntentBits, PermissionsBitField, ActivityType } = require('discord.js');
 const { stringify } = require('querystring');
 let monitoringInstance;
@@ -169,6 +169,9 @@ client.on('interactionCreate', async interaction => {
                     break;
                 case "info":
                     await ImageInfo(interaction, client);
+                    break;
+                case "question":
+                    await ImageQuestion(interaction, client);
                     break;
                 default:
                     await interactionReply({interaction: interaction, description: "Error."});

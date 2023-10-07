@@ -92,12 +92,14 @@ async function messageCreate({channel = null, title = " ", description = " ", fo
         if(channel == null) throw new Error("No channel in Embed");
 
         // Channel type 1 is type of DM
+        /*
         if(channel.type != 1 && !channel.permissionsFor(channel.guild?.me).has([PermissionsBitField.Flags.SendMessages, PermissionsBitField.Flags.ViewChannel])) {
             try {
             await channel.send({content: "I do not have the proper permissions! I need the SEND_MESSAGES and VIEW_CHANNEL permissions"});
             } catch (e) {};
             throw "No permissions";
         }
+        */
 
         const embed = new EmbedBuilder();
         //embed.setColor(color)
@@ -123,11 +125,13 @@ async function messageEdit({message = null, title = " ", description = " ", foot
     try {
         if(message == null) throw new Error("No message in Embed");
 
+        /*
         const channel = message.channel;
         if(!channel.permissionsFor(channel.guild.members.me).has([PermissionsBitField.Flags.SendMessages, PermissionsBitField.Flags.ViewChannel])) {
             await message.edit({content: "I do not have the proper permissions! I need the SEND_MESSAGES and VIEW_CHANNEL permissions"});
             throw "No permissions";
         }
+        */
 
         const embed = new EmbedBuilder();
         //embed.setColor(color)

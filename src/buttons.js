@@ -204,9 +204,39 @@ async function Info(interaction, client) {
     }
 }
 
+async function Question(interaction, client) {
+    try {
+
+        const json = JSON.parse(fs.readFileSync(`${__dirname}/imgData.json`));
+        
+        const el = json[interaction.message.content.toLowerCase().replace(/\-/g, "")];
+        el.id = interaction.message.content.toLowerCase().replace(/\-/g, "");
+
+        if(!el) return await interactionReply({interaction: interaction, description: "Unable to find image...", ephemeral: true})
+
+        await interactionReply({interaction: interaction, description: `Questioning ${interaction.message.content.toLowerCase().replace(/\-/g, "")}`, ephemeral: true});
+
+        const channel = await client.channels.fetch(config.questionChannel);
+        if (channel) {
+            try {
+                const link = `https://discord.com/channels/${interaction.message.guildId}/${interaction.message.channelId}/${interaction.message.id}`;
+                await messageCreate({channel: channel, title: `${interaction.user.globalName} is questioning an image`, description: link, footer: `ID: ${el.id}`});
+            } catch(err) {
+                console.error(err);
+            }
+        }
+
+        return;
+
+    } catch(e) {
+        throw e;
+    }
+}
+
 module.exports = {
     ImageBan: Ban,
     ImageWarn: Warn,
     ImageDelete: Delete,
-    ImageInfo: Info
+    ImageInfo: Info,
+    ImageQuestion: Question
 }

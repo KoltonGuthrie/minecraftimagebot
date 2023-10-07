@@ -40,6 +40,10 @@ async function uploadImg(json)
               .setCustomId("info")
               .setLabel('Info ℹ️')
               .setStyle(ButtonStyle.Primary),
+            new ButtonBuilder()
+              .setCustomId("question")
+              .setLabel('Question ❓')
+              .setStyle(ButtonStyle.Primary),
         );
         
 

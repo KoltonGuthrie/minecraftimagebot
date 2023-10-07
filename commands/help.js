@@ -13,8 +13,8 @@ async function main(interaction, client) {
         [Our Webpage](${config.webpageURL}) | [Invite Me](${config.inviteURL})
         \n<> - required, [] - optional
         \n**Commands:**
-        **/img file <FILE>** [low | average | high] - *Main command (Upload with file)*
-        **/img url <LINK>** [low | average | high] - *Main command (Upload with link)*
+        **/img file <FILE>** [low | average | high] [width] [height] - *Main command (Upload with file)*
+        **/img url <LINK>** [low | average | high] [width] [height] - *Main command (Upload with link)*
         **/download <ID>** - *View your image without compression*
         **/remove <ID>** - *Remove image*
         **/info <ID>** - *View info of image (used blocks)*

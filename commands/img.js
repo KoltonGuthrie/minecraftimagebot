@@ -57,7 +57,7 @@ async function main(interaction, client) {
             }
         } else if (interaction.options.getSubcommand() == "file") {
             const file = interaction.options.getAttachment('file');
-            console.log(file);
+            //console.log(file);
             //if (!file.attachment.toLowerCase().endsWith(".png") && !file.attachment.toLowerCase().endsWith(".jpg") && !file.attachment.toLowerCase().endsWith(".jpeg") && !file.attachment.toLowerCase().endsWith(".webp")) {
             if(file.contentType !== 'image/jpeg' && file.contentType !== 'image/jpg' && file.contentType !== 'image/png') {
                 return await embed.interactionReply({
