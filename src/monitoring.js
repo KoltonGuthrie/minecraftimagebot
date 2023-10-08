@@ -83,7 +83,7 @@ function setShardCount(n) {
 }
 
 function observeClientAPIPing(n, s) {
-    //clientAPIPing.observe(n);
+    clientAPIPing.observe(n);
 }
 
 function observeImageSize(n) {

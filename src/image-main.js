@@ -113,7 +113,8 @@ let download = function(uri, filename, callback){ // download image function)
     })
       .then(
         (response) =>
-          new Promise((resolve, reject) => {
+          new Promise((resolve) => {
+            console.log(response.data.headers);
             if (
               !response.data.headers["content-type"].startsWith("image/") ||
               response.data.headers["content-type"].startsWith("image/webp")
