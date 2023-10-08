@@ -179,7 +179,7 @@ async function getMemoryUsage() {
 }
 
 function initializeMonitoring(id) {
-    /*
+    
 
     clientAPIPing = new client.Histogram({name: `shard_${id}_api_ping`, help: 'Ping to the Discord API', buckets: [0.1, 5, 15, 50, 100, 500] });
     register.registerMetric(clientAPIPing);
@@ -212,7 +212,7 @@ function initializeMonitoring(id) {
 
     // Start the HTTP server which exposes the metrics on http://localhost:8000/metrics
     server.listen(8000 + id);
-    */
+    
     return {
         setGuilds: setGuilds,
         setMembers: setMembers,
