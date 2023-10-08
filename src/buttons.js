@@ -2,7 +2,7 @@ const config = require('../config.json');
 const { interactionReply, messageCreate } = require('./embed');
 const fs = require('fs');
 const axios = require('axios');
-const { getImage, getUser, updateUser, getStatus, deleteImage } = require('./database');
+const { getImage, getUser, updateUser, getStatus, removeImage } = require('./database');
 
 async function Ban(interaction, client) {
     try {
@@ -174,7 +174,7 @@ async function Delete(interaction, client, admin = false) {
             // Remove from GoFile Servers End 
             //////////////////////////////////////////////
 
-            await deleteImage({id: id});
+            await removeImage({id: id});
             // Delete from JSON
             //delete json[id];
 

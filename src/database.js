@@ -2,10 +2,9 @@ const { AsyncDatabase } = require("promised-sqlite3");
 const fs = require('fs');
 const path = require("path");
 
-const websockets = new Map(); // Websockets stored in memory (So I can store them as objects)
-
-const dir = 'db';
+const dir = `${__dirname}/../db`;
 const file = '/minecraft_image_bot_database.sqlite';
+console.log(dir, file);
 
 
 init();
@@ -130,6 +129,9 @@ async function updateUser({ id , key, value }) {
     if(!key || !value || !id) return null;
 
 	const db = await connect();
+
+	if(!(await getUser({id}))) await addUser({id});
+	
     await db.run(`UPDATE users SET ${key} = ? WHERE id LIKE ?;`,[value, id]);
 	await db.close();
 
