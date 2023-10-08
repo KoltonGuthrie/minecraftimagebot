@@ -3,26 +3,26 @@ const Discord = require('discord.js');
 const { interactionReply } = require("../src/embed");
 const fs = require("fs");
 const config = require("../config.json");
+const { getImage } = require('../src/database');
 
 async function main(interaction, client) {
     try {
 
         const id = interaction.options.getString('id').toLowerCase().replace(/\-| /g, "");
 
-        const json = JSON.parse(fs.readFileSync(`${__dirname}/../src/imgData.json`));
+        const data = await getImage({ id: id });
 
-        if(json[id]) {
-            const el = json[id];
+        if(data) {
 
-            if (el?.link == undefined) return await interactionReply({interaction: interaction, description: ":x: Failed to upload. Please regenerate the image"});
+            if (data.link == undefined) return await interactionReply({interaction: interaction, description: ":x: Failed to upload. Please regenerate the image"});
 
-            if (el?.link == "uploading") {
+            if (data.link == "uploading") {
                 return await interactionReply({interaction: interaction, description: "Image is being uploaded... Try again in a bit"});
-            } else if (el?.link == "failed") {
+            } else if (data.link == "failed") {
                 return await interactionReply({interaction: interaction, description: ":x: Failed to upload. Please regenerate the image"});
             }
 
-            return await interactionReply({interaction: interaction, title: `${el?.name}.png`, description: `[Download link](${el?.link})`});
+            return await interactionReply({interaction: interaction, title: `${data.name}.png`, description: `[Download link](${data.link})`});
         } else {
             return await interactionReply({interaction: interaction, description: ":x: No image with that ID found"});
         }

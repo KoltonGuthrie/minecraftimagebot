@@ -7,6 +7,8 @@ const axios = require("axios");
 const { ImageBan, ImageWarn, ImageDelete, ImageInfo, ImageQuestion } = require(`${__dirname}/src/buttons.js`);
 const { Options, Client, Collection, GatewayIntentBits, PermissionsBitField, ActivityType } = require('discord.js');
 const { stringify } = require('querystring');
+const { getUser, updateStatus } = require(`${__dirname}/src/database.js`);
+
 let monitoringInstance;
 
 const client = new Client(
@@ -79,14 +81,13 @@ client.on("shardReady", async (id, unavailableGuilds) => {
   
     if (channel) {
       console.log(`[PHOTO CHANNEL] Task given to Shard #${id}`);
-      fs.writeFileSync(`${__dirname}/canstart.txt`, "true");
+      await updateStatus({key: "canStart", value: "true"})
     }
-    //if(channel) { console.log(`[CACHING PHOTOS] Task given to Shard #${id}`); console.log(`[GET DONORS] Task given to Shard #${id}`); fs.writeFileSync(`${process.mainModule.path}/canstart.txt`, "true"); cachePhotos(); }
   
     if (id === client.shard.client.options.shardCount - 1) {
       console.log(`[UPDATE LOOP] Task given to Shard #${id}`);
       //updateLoopLoop();
-      fs.writeFileSync(`${__dirname}/candelete.txt`, "true");
+      await updateStatus({key: "canDelete", value: "true"})
 
       const cron = require(`${__dirname}/src/removeOldPhotos`);
       cron.start(client);
@@ -114,12 +115,9 @@ client.on('interactionCreate', async interaction => {
         }
         */
 
-        let warnsAndBans = JSON.parse(fs.readFileSync(`${__dirname}/src/blockedIDs.json`));
-        let blockedIDs = warnsAndBans["bans"];
-        let warnedIDs = warnsAndBans["warns"];
-        
-        if (blockedIDs.includes(interaction.user.id)) return await interactionReply({interaction: interaction, description: `:x: You have broken one of our rules and have been banned from using the bot. [Rules](${config.rulesURL})\nIf you think that your ban was unfair, you may contact us from our server: ${config.supportURL}`});
+        const user = await getUser({ id: interaction.user.id});
 
+        if (user && user.banned === "true") return await interactionReply({interaction: interaction, description: `:x: You have broken one of our rules and have been banned from using the bot. [Rules](${config.rulesURL})\nIf you think that your ban was unfair, you may contact us from our server: ${config.supportURL}`});
 
 		try {
 
@@ -149,7 +147,7 @@ client.on('interactionCreate', async interaction => {
                 } catch (e) {
                     console.error(e);
                 }
-                await interactionReply({ interaction: interaction, description: 'There was an error while executing this command!', footer: `If you continue to get their error please report it in our support server. ID:${id}`, ephemeral: true });
+                await interactionReply({ interaction: interaction, description: 'There was an error while executing this command!', footer: `If you continue to get their error please report it in our support server. ID:${id}`, ephemeral: true, color: '#cf2b0e' });
             } catch(err) {
                 console.error(err);
             }

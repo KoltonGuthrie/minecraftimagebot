@@ -360,6 +360,7 @@ allowedBlocks = [
   const cp = require("child_process");
   const fs = require("fs");
   const axios = require("axios");
+  const { updateImage } = require(`${__dirname}/database.js`);
   
   (async () => {
     //console.log(process.argv)
@@ -476,10 +477,10 @@ allowedBlocks = [
           );
           //console.log(nearestColor(rgbToHex(result[0], result[1], result[2])));
           if (!searchArr(usedBlocks, usingBlock))
-            usedBlocks.push({ name: usingBlock, amount: 0 });
+            usedBlocks.push({ n: usingBlock, a: 0 });
           usedBlocks.forEach((b) => {
-            if (b.name === usingBlock) {
-              b.amount++;
+            if (b.n === usingBlock) { // name
+              b.a++; // amount
               return;
             }
           });
@@ -538,7 +539,7 @@ allowedBlocks = [
 
     console.log(end.getTime() - start.getTime() + "ms\nRuns: " + runs);
 
-    usedBlocks.sort(sortArr("amount"));
+    usedBlocks.sort(sortArr("a")); // sort by amount
   
     await mcImage.save(path);
   
@@ -551,6 +552,26 @@ allowedBlocks = [
   }
   */
   
+  try {
+    const size = getFilesizeInBytes(path).toFixed(2);
+
+    const jsonString = JSON.stringify({
+      size: size,
+      width: mcImage.width,
+      height: mcImage.height,
+      blockAmount: runs,
+      name: imageName,
+      blocks: usedBlocks,
+    });
+    console.log(sendMessageID)
+
+    await updateImage({interaction: sendMessageID, key: 'blockData', value: jsonString});
+
+
+  } catch(err) {
+    console.error(err);
+  }
+  /*
     try {
       size = getFilesizeInBytes(path).toFixed(2);
       const res = await axios.post(
@@ -574,6 +595,7 @@ allowedBlocks = [
     } catch (e) {
       console.log(e);
     }
+    */
   
     await process.send(["done", path]);
   })();
@@ -597,7 +619,7 @@ allowedBlocks = [
   
   function searchArr(arr, name) {
     for (let i = 0; arr.length > i; i++) {
-      if (arr[i].name === name) return true;
+      if (arr[i].n === name) return true;
     }
     return false;
   }

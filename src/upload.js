@@ -4,6 +4,7 @@ const FormData = require("form-data");
 const config = require('../config.json');
 const { interactionUpdate } = require("./embed");
 const { SlashCommandSubcommandBuilder } = require("@discordjs/builders");
+const { updateImage } = require("./database");
 
 async function uploadImg(json)
   {
@@ -108,18 +109,7 @@ async function uploadImg(json)
 
     await interactionUpdate({interaction: interaction, title: `${imageName}.png`, description: `Download in higher definition using:\n\`/download ${specialID}\`\n[Click here if image doesn't load](${status[0]})`, "url": status[0], "footer": `Image ID: ${specialID}`});
 
-    imgData = JSON.parse(fs.readFileSync(`${__dirname}/imgData.json`));
-
-    if(!imgData[specialID.toLowerCase().replace(/\-/g, "")]) {
-      imgData[specialID.toLowerCase().replace(/\-/g, "")] = {};
-    }
-
-    imgData[specialID.toLowerCase().replace(/\-/g, "")].discordImgID = status[1];
-    fs.writeFileSync(`${__dirname}/imgData.json`, JSON.stringify(imgData));
-
-    //sendMessage.edit(img.attachments.first().url); // discord message
-    //console.log(specialID);
-    //console.log(imageName);
+    await updateImage({id: specialID.toLowerCase().replace(/\-/g, ""), key: 'discordImgID', value: status[1]});
 
     // UPLOAD TO 3RD PARTY
     try {
@@ -165,19 +155,9 @@ async function uploadImg(json)
       return;
     }
 
-
-    imgData = JSON.parse(fs.readFileSync(`${__dirname}/imgData.json`));
-
-    if(!imgData[specialID.toLowerCase().replace(/\-/g, "")]) {
-      imgData[specialID.toLowerCase().replace(/\-/g, "")] = {};
-    }
-
-    imgData[specialID.toLowerCase().replace(/\-/g, "")].link = `https://gofile.io/d/${upload.data.data.code}`;
-    imgData[specialID.toLowerCase().replace(/\-/g, "")].fileId =
-      upload.data.data.fileId;
-    imgData[specialID.toLowerCase().replace(/\-/g, "")].folderId =
-      upload.data.data.parentFolder;
-    fs.writeFileSync(`${__dirname}/imgData.json`, JSON.stringify(imgData));
+    await updateImage({id: specialID.toLowerCase().replace(/\-/g, ""), key: 'link', value: `https://gofile.io/d/${upload.data.data.code}` });
+    await updateImage({id: specialID.toLowerCase().replace(/\-/g, ""), key: 'fileId', value: upload.data.data.fileId });
+    await updateImage({id: specialID.toLowerCase().replace(/\-/g, ""), key: 'folderId', value: upload.data.data.parentFolder });
 
     //console.log(imgData)
 
@@ -241,19 +221,9 @@ async function uploadImg(json)
       return;
     }
 
-    imgData = JSON.parse(fs.readFileSync(`${__dirname}/imgData.json`));
-
-    if(!imgData[specialID.toLowerCase().replace(/\-/g, "")]) {
-      imgData[specialID.toLowerCase().replace(/\-/g, "")] = {};
-    }
-
-    imgData[
-      specialID.toLowerCase().replace(/\-/g, "")
-    ].link = `https://gofile.io/d/${upload.data.data.code}`;
-    imgData[specialID.toLowerCase().replace(/\-/g, "")].fileId =
-      upload.data.data.fileId;
-    imgData[specialID.toLowerCase().replace(/\-/g, "")].folderId =
-      upload.data.data.parentFolder;
+    await updateImage({id: specialID.toLowerCase().replace(/\-/g, ""), key: 'link', value: `https://gofile.io/d/${upload.data.data.code}` });
+    await updateImage({id: specialID.toLowerCase().replace(/\-/g, ""), key: 'fileId', value: upload.data.data.fileId });
+    await updateImage({id: specialID.toLowerCase().replace(/\-/g, ""), key: 'folderId', value: upload.data.data.parentFolder });
 
     let status;
         
@@ -272,9 +242,7 @@ async function uploadImg(json)
       console.log(err);
     }
 
-    imgData[specialID.toLowerCase().replace(/\-/g, "")].discordImgID = status[0];
-
-    fs.writeFileSync(`${__dirname}/imgData.json`, JSON.stringify(imgData));
+    await updateImage({id: specialID.toLowerCase().replace(/\-/g, ""), key: 'discordImgID', value: status[0] });
 
     await interactionUpdate({interaction: interaction, title: `${imageName}.png`, description: `https://gofile.io/d/${upload.data.data.code}`, footer: `Image ID: ${specialID}`});
 
@@ -293,14 +261,8 @@ async function uploadImg(json)
 }
 
 async function failedUpload(specialID, path, interaction, callback) {
-  imgData = JSON.parse(fs.readFileSync(`${__dirname}/imgData.json`));
+  await updateImage({id: specialID.toLowerCase().replace(/\-/g, ""), key: 'link', value: "failed" });
 
-  if(!imgData[specialID.toLowerCase().replace(/\-/g, "")]) {
-    imgData[specialID.toLowerCase().replace(/\-/g, "")] = {};
-  }
-
-  imgData[specialID.toLowerCase().replace(/\-/g, "")].link = "failed";
-  fs.writeFileSync(`${__dirname}/imgData.json`, JSON.stringify(imgData));
   try {
     //await file.destroy();
     await fs.unlinkSync(path);

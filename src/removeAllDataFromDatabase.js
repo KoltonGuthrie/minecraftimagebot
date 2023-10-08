@@ -13,6 +13,9 @@ const prompt = readline.createInterface({
   output: process.stdout
 });
 
+console.log("This has not been updated to use the Sqlite database!");
+return;
+
 prompt.question('\x1b[33m Would you like to delete the images from Discord & 3rd-party servers? (y/n)\x1b[0m\n', (response) => { 
     const res = response.toLowerCase();
 

@@ -3,10 +3,6 @@ const Discord = require('discord.js');
 const { interactionReply } = require("../src/embed");
 const config = require("../config.json");
 
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 async function main(interaction, client) {
     try {
         await interactionReply({interaction: interaction, description: `
@@ -17,7 +13,6 @@ async function main(interaction, client) {
         **/img url <LINK>** [low | average | high] [width] [height] - *Main command (Upload with link)*
         **/download <ID>** - *View your image without compression*
         **/remove <ID>** - *Remove image*
-        **/info <ID>** - *View info of image (used blocks)*
         **/support** - *Get the support link for me*
         **/invite** - *Get the invite link for me*
         **/help** - *Shows this page*
@@ -27,7 +22,8 @@ async function main(interaction, client) {
         Low - **10** seconds
         Average - **20** seconds
         High - **30** seconds
-        \n[Rules](${config.rulesURL}) | [TOS](${config.tosURL}) | [Support](${config.supportURL})`})
+        \n[Rules](${config.rulesURL}) | [TOS](${config.tosURL}) | [Support](${config.supportURL})`});
+        //**/info <ID>** - *View info of image (used blocks)*
     } catch(e) {
         throw e;
     }

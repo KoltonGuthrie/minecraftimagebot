@@ -42,7 +42,6 @@ const image_size = new client.Histogram({name: 'image_size', help: 'external mem
 
 register.registerMetric(guilds);
 register.registerMetric(members);
-//register.registerMetric(clientAPIPing);
 register.registerMetric(shardCount);
 
 register.registerMetric(download_command_usage);
@@ -84,7 +83,7 @@ function setShardCount(n) {
 }
 
 function observeClientAPIPing(n, s) {
-    clientAPIPing.observe(n);
+    //clientAPIPing.observe(n);
 }
 
 function observeImageSize(n) {
@@ -180,6 +179,7 @@ async function getMemoryUsage() {
 }
 
 function initializeMonitoring(id) {
+    /*
 
     clientAPIPing = new client.Histogram({name: `shard_${id}_api_ping`, help: 'Ping to the Discord API', buckets: [0.1, 5, 15, 50, 100, 500] });
     register.registerMetric(clientAPIPing);
@@ -212,7 +212,7 @@ function initializeMonitoring(id) {
 
     // Start the HTTP server which exposes the metrics on http://localhost:8000/metrics
     server.listen(8000 + id);
-
+    */
     return {
         setGuilds: setGuilds,
         setMembers: setMembers,
@@ -223,6 +223,7 @@ function initializeMonitoring(id) {
         setShardCount: setShardCount,
         observeImageSize: observeImageSize,
     }
+    
 }
 
 module.exports = initializeMonitoring;

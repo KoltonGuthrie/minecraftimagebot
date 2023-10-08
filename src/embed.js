@@ -3,7 +3,7 @@ const { PermissionsBitField } = require('discord.js');
 
 const config = require("../config.json");
 
-async function interactionReply({interaction = null, title = " ", description = " ", url = null, fields = null, footer = ` `,  color = "#0099ff", ephemeral = false}) {
+async function interactionReply({interaction = null, title = " ", description = " ", url = null, fields = null, footer = ` `,  color = "#024a00", ephemeral = false}) {
     try {
         if(interaction == null) throw new Error("No interaction in Embed");
 
@@ -21,7 +21,7 @@ async function interactionReply({interaction = null, title = " ", description = 
         */
 
         const embed = new EmbedBuilder();
-        //embed.setColor(color)
+        embed.setColor(color)
         embed.setTitle(title)
         //embed.setURL('https://discord.js.org/')
         //embed.setAuthor({ name: 'Some name', iconURL: 'https://i.imgur.com/AfFp7pu.png', url: 'https://discord.js.org' })
@@ -48,7 +48,7 @@ async function interactionReply({interaction = null, title = " ", description = 
 }
 
 
-async function interactionUpdate({interaction = null, title = " ", description = " ", url = null, fields = null, footer = " ",  color = "#0099ff", ephemeral = false}) {
+async function interactionUpdate({interaction = null, title = " ", description = " ", url = null, fields = null, footer = " ",  color = "#024a00", ephemeral = false}) {
     try {
         if(interaction == null) throw new Error("No interaction in Embed");
 
@@ -61,7 +61,7 @@ async function interactionUpdate({interaction = null, title = " ", description =
         */
 
         const embed = new EmbedBuilder();
-        //embed.setColor(color)
+        embed.setColor(color)
         embed.setTitle(title)
         //embed.setURL('https://discord.js.org/')
         embed.setAuthor({name: `Minecraft Image Bot`,url: config.webpageURL,iconURL: config.avatarURL})
@@ -87,7 +87,7 @@ async function interactionUpdate({interaction = null, title = " ", description =
     }
 }
 
-async function messageCreate({channel = null, title = " ", description = " ", footer = " ", components = [], color = "#0099ff", interaction = null}) {
+async function messageCreate({channel = null, title = " ", description = " ", footer = " ", components = [], color = "#024a00", interaction = null}) {
     try {
         if(channel == null) throw new Error("No channel in Embed");
 
@@ -121,7 +121,7 @@ async function messageCreate({channel = null, title = " ", description = " ", fo
     }
 }
 
-async function messageEdit({message = null, title = " ", description = " ", footer = " ",  color = "#0099ff", components = []}) {
+async function messageEdit({message = null, title = " ", description = " ", footer = " ",  color = "#024a00", components = []}) {
     try {
         if(message == null) throw new Error("No message in Embed");
 

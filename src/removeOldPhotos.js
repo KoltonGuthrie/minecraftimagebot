@@ -3,6 +3,7 @@ const fs = require('fs');
 const axios = require('axios');
 
 const config = require('../config.json');
+const { getAllImages, removeImage } = require('./database');
 
 let client;
 
@@ -21,14 +22,16 @@ function start(c) {
 
 async function remove() {
 
-    let json = JSON.parse(fs.readFileSync(`${__dirname}/imgData.json`));
+    //let json = JSON.parse(fs.readFileSync(`${__dirname}/imgData.json`));
+    const data = await getAllImages();
     
-    let keys = Object.keys(json);
+    //let keys = Object.keys(json);
     
-    for (let i = 0; keys.length > i; i++) {
-        const el = json[keys[i]];
+    for (let i = 0; data.length > i; i++) {
+        const el = data[i];
         //604800000
         if (!el.time || new Date().getTime() - el.time > 604800000) {
+          console.log("removing: " + el.id);
   
             //////////////////////////////////////////////
             // Remove from Minecraft image bot Server Start  
@@ -61,7 +64,8 @@ async function remove() {
                 //////////////////////////////////////////////
                 // Remove from Minecraft image bot Website Start 
                 //////////////////////////////////////////////
-    
+                  
+                /*
                 try {
                     await axios.post(
                       "https://minecraftimagebot.glitch.me/deleteimage",
@@ -76,6 +80,7 @@ async function remove() {
                 } catch (e) {
                     console.log(e);
                 }
+                */
     
                 //////////////////////////////////////////////
                 // Remove from Minecraft image bot Website End 
@@ -104,10 +109,11 @@ async function remove() {
                 //////////////////////////////////////////////
 
                 // Delete from JSON
-                delete json[keys[i]];
+                await removeImage({id: el.id})
+                //delete json[keys[i]];
     
                 // Write to json file
-                fs.writeFileSync(`${__dirname}/imgData.json`,JSON.stringify(json));
+                //fs.writeFileSync(`${__dirname}/imgData.json`,JSON.stringify(json));
 
         }
     }

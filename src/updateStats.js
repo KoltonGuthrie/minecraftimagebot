@@ -1,6 +1,8 @@
 const CronJob = require('cron').CronJob;
 const axios = require('axios');
 const fs = require('fs');
+const config = require('../config.json')
+const { getStatus } = require('./database');
 
 let client;
 
@@ -25,10 +27,10 @@ const job = new CronJob('0 */10 * * * *', function() {
     //console.log("Updating stats!");
     try {
         await axios.post("https://minecraftimagebot.glitch.me/saveInfo", {
-            auth: "Q4JsH0mQrWfkTmHJ4pfR",
+            auth: config.websiteAuth,
             guilds: guildAmount,
             donors: "undefined",
-            imagesMade: Number(fs.readFileSync(`${process.mainModule.path}/imagesMade.txt`)),
+            imagesMade: Number((await getStatus()).imagesMade),
             users: userAmount,
         });
     } catch(err) {

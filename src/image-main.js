@@ -5,6 +5,7 @@ const { Image } = require("image-js");
 const axios = require("axios");
 const cp = require("child_process");
 const { interactionReply, interactionUpdate } = require("./embed");
+const { addImage, updateImage, updateUser, deleteImage } = require('./database');
 
 var blockSize = 16;
 
@@ -26,6 +27,16 @@ async function make(json) {
     .match(/.{1,4}/g)
     .join("-");
 
+  await addImage({
+    id: specialID.toLowerCase().replace(/\-/g, ""),
+    time: (new Date().getTime()),
+    name: downloadURL.split("/").pop().split(".")[0].split("#")[0].split("?")[0],
+    author: interaction.user.id,
+    channel: interaction.channel.id,
+    interaction: interaction.id,
+    link: "uploading",
+  });  
+  /*
   let imgData = JSON.parse(fs.readFileSync(`${__dirname}/imgData.json`));
 
   imgData[specialID.toLowerCase().replace(/\-/g, "")] = {
@@ -38,6 +49,7 @@ async function make(json) {
   };
 
   fs.writeFileSync(`${__dirname}/imgData.json`, JSON.stringify(imgData));
+  */
 
   let maxSize = 0;
 
@@ -195,6 +207,9 @@ async function scanImage(json) {
       fs.unlinkSync(pathURL);
     } catch(e) {}
 
+    await updateUser({id: interaction.user.id, key: 'queueTime', value: 0});
+    await deleteImage({id: specialID.toLowerCase().replace(/\-/g, "")});
+    /*
     let queue = JSON.parse(fs.readFileSync(`${__dirname}/imgQueue.json`));
     queue[interaction.guild.id] = 0;
     fs.writeFileSync(`${__dirname}/imgQueue.json`, JSON.stringify(queue));
@@ -202,6 +217,7 @@ async function scanImage(json) {
     let imgData = JSON.parse(fs.readFileSync(`${__dirname}/imgData.json`));
     delete imgData[specialID.toLowerCase().replace(/\-/g, "")];
     fs.writeFileSync(`${__dirname}/imgData.json`, JSON.stringify(imgData));
+    */
 
     console.log(
       `[ERROR] Image was not supported. URL: ${downloadURL} Path: ${pathURL}`

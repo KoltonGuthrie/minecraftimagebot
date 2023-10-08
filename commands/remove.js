@@ -4,26 +4,27 @@ const { interactionReply } = require("../src/embed");
 const fs = require("fs");
 const config = require("../config.json");
 const axios = require("axios");
+const { getImage, getStatus, removeImage } = require('../src/database');
 
 async function main(interaction, client) {
     try {
         const id = interaction.options.getString('id').toLowerCase().replace(/\-| /g, "");
 
-        const json = JSON.parse(fs.readFileSync(`${__dirname}/../src/imgData.json`));
+        const data = await getImage({ id: id });
 
-        if(json[id]) {
+        if(data) {
 
-            if (!el?.author || !el?.interaction || !el?.discordImgID || !interaction?.user?.id) {
+            if (!data.author || !data.interaction || !data.discordImgID || !interaction?.user?.id) {
               await interactionReply({interaction: interaction, description: ":x: Failed to get image info. Please try again"});
               return;
             }
 
-            if (el?.author !== interaction?.user?.id) {
-              await interactionReply({interaction: interaction, description: ":no_entry_sign: Only the original owner can request for image deletion"});
+            if (data.author !== interaction?.user?.id) {
+              await interactionReply({interaction: interaction, description: ":no_entry_sign: Only the original owner can request for image deletion", color: '#cf2b0e'});
               return;
             }
 
-            if (el.link == "uploading" || fs.readFileSync(`${__dirname}/../candelete.txt`).toString() == "false") {
+            if (data.link == "uploading" || (await getStatus()).canDelete == "false") {
               await interactionReply({interaction: interaction, description: "Image cannot be removed right now. Try again in a bit"});
               return;
             }
@@ -57,7 +58,7 @@ async function main(interaction, client) {
               }
       
               await client.shard.broadcastEval(df4, {
-                context: { el: el, config: config },
+                context: { el: data, config: config },
               });
 
             //////////////////////////////////////////////
@@ -68,6 +69,7 @@ async function main(interaction, client) {
             // Remove from Minecraft image bot Website Start 
             //////////////////////////////////////////////
 
+            /*
             try {
                 await axios.post(
                   "https://minecraftimagebot.glitch.me/deleteimage",
@@ -82,6 +84,7 @@ async function main(interaction, client) {
             } catch (e) {
                 console.log(e);
             }
+            */
 
             //////////////////////////////////////////////
             // Remove from Minecraft image bot Website End 
@@ -92,11 +95,11 @@ async function main(interaction, client) {
             //////////////////////////////////////////////
             
             try {
-                if (el.link?.includes("https://gofile.io/d")) {
+                if (data.link?.includes("https://gofile.io/d")) {
                 axios({
                     method: "delete",
                     url: `https://api.gofile.io/deleteContent`,
-                    data: { contentsId: el?.folderId, token: config.GOFILETOKEN },
+                    data: { contentsId: data?.folderId, token: config.GOFILETOKEN },
                 }).then(function (res) {
                     //console.log(res);
                 });
@@ -109,18 +112,21 @@ async function main(interaction, client) {
             // Remove from GoFile Servers End 
             //////////////////////////////////////////////
 
+            await removeImage({id: id});
+            /*
             // Delete from JSON
             delete json[id];
 
             // Write to json file
             fs.writeFileSync(`${__dirname}/../src/imgData.json`,JSON.stringify(json));
+            */
 
             // Reply
             await interactionReply({interaction: interaction, description: `:wastebasket: Deleted image ${interaction.options.getString('id').toUpperCase()}`});
             return;
 
         } else {
-            await interactionReply({interaction: interaction, description: ":x: No image with that ID found"});
+            await interactionReply({interaction: interaction, description: ":x: No image with that ID found", color: '#cf2b0e'});
             return;
         }
     } catch(e) {

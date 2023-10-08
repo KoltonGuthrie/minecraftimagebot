@@ -4,6 +4,7 @@ const config = require("../config.json");
 const {interactionReply, interactionUpdate} = require('../src/embed');
 const img = require('../src/image-main')
 const upload = require("../src/upload");
+const { getUser, updateUser, addUser, getStatus, updateStatus } = require('../src/database');
 
 const {SlashCommandBuilder} = require('@discordjs/builders');
 const fs = require('fs');
@@ -68,11 +69,15 @@ async function main(interaction, client) {
             downloadURL = file.attachment;
         }
         
-        if(checkQueue(interaction, delayTimer) == 1) return;
+        if(await checkQueue(interaction, delayTimer) == 1) return;
 
         await interactionReply({interaction: interaction, description: "Starting..."});
 
-        fs.writeFileSync(`${__dirname}/../imagesMade.txt`,(Number(fs.readFileSync(`${__dirname}/../imagesMade.txt`)) +1).toString());
+        const status = await getStatus() || null;
+
+        if(status !== null && status.imagesMade !== null) {
+            await updateStatus({key: 'imagesMade', value: (status.imagesMade + 1)});
+        }
 
             const makeImageAndUpload = async (options) => {
             return new Promise((resolve, reject) => {
@@ -185,39 +190,34 @@ function getFilesizeInBytes(filename) {
     }
 }
 
-function checkQueue(interaction, delayTimer) {
+async function checkQueue(interaction, delayTimer) {
     try {
-        let queue = JSON.parse(fs.readFileSync(`${__dirname}/../src/imgQueue.json`));
         const userID = interaction.user.id;
+        const user = await getUser({id: userID});
 
-        if (queue[userID] > new Date().getTime()) {
-            h = Math.floor((queue[userID] - new Date().getTime()) / 1000 / 60 / 60);
-            m = Math.floor(((queue[userID] - new Date().getTime()) / 1000 / 60 / 60 - h) * 60);
-            s = Math.floor((((queue[userID] - new Date().getTime()) / 1000 / 60 / 60 - h) * 60 - m) * 60);
+        if (user && user.queueTime > new Date().getTime()) {
+            h = Math.floor((user.queueTime - new Date().getTime()) / 1000 / 60 / 60);
+            m = Math.floor(((user.queueTime - new Date().getTime()) / 1000 / 60 / 60 - h) * 60);
+            s = Math.floor((((user.queueTime - new Date().getTime()) / 1000 / 60 / 60 - h) * 60 - m) * 60);
             time = `${m > 0 ? m + " minutes and " : ""}${s} seconds`;
 
             interactionReply({interaction:interaction, description: `:x: This is on cooldown for ${time}.`})
             return 1;
 
-        } else {
-            queue[userID] = new Date().getTime() + delayTimer;
         }
 
-        if (typeof queue[userID] == "undefined")
-        
-        queue[userID] = new Date().getTime() + delayTimer;
-
-        fs.writeFileSync(`${__dirname}/../src/imgQueue.json`,JSON.stringify(queue));
+        if(user) {
+            await updateUser({id: user.id, key: 'queueTime', value: (new Date().getTime() + delayTimer)});
+        } else {
+            await addUser({id: userID, warned: 'false', banned: 'false', queueTime: (new Date().getTime() + delayTimer)});
+        }
 
         return 0;
         
     } catch (e) {
         console.error(e);
     }
-}
-
-// 
-
+} 
 
 const MIN_SIZE = 2;
 const MAX_SIZE = 350;
