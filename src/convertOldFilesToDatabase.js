@@ -1,6 +1,7 @@
 const readline = require('readline');
 const fs = require('fs');
 const path = require('path');
+const { getAllImages, getUser, addUser } = require('../src/database');
 
 const prompt = readline.createInterface({
   input: process.stdin,
@@ -86,6 +87,15 @@ prompt.question(`\x1b[33m Have you turning the Discord bot \x1b[31mOFF\x1b[33m? 
                 await addUser({id});
 
                 await updateUser({id: id, key: 'banned', value: 'true'});
+            }
+
+            console.log(`\x1b[32m Adding all other users from images...\x1b[0m`);
+            const images = await getAllImages();
+    
+            for(const image of images) {
+                const user = await getUser({id: image.author});
+                if(!user) await addUser({id: image.author});
+                console.log(user);
             }
 
             console.log(`\x1b[32m Adding imagesMade...\x1b[0m`);
