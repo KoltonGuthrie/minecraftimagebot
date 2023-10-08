@@ -3,7 +3,7 @@ const { PermissionsBitField } = require('discord.js');
 
 const config = require("../config.json");
 
-async function interactionReply({interaction = null, title = " ", description = " ", url = null, fields = null, footer = ` `,  color = "#024a00", ephemeral = false}) {
+async function interactionReply({interaction = null, title = " ", description = " ", url = null, fields = null, footer = ` `,  color = "#2E8B57", ephemeral = false}) {
     try {
         if(interaction == null) throw new Error("No interaction in Embed");
 
@@ -48,7 +48,7 @@ async function interactionReply({interaction = null, title = " ", description = 
 }
 
 
-async function interactionUpdate({interaction = null, title = " ", description = " ", url = null, fields = null, footer = " ",  color = "#024a00", ephemeral = false}) {
+async function interactionUpdate({interaction = null, title = " ", description = " ", url = null, fields = null, footer = " ",  color = "#2E8B57", ephemeral = false}) {
     try {
         if(interaction == null) throw new Error("No interaction in Embed");
 
@@ -87,7 +87,7 @@ async function interactionUpdate({interaction = null, title = " ", description =
     }
 }
 
-async function messageCreate({channel = null, title = " ", description = " ", footer = " ", components = [], color = "#024a00", interaction = null}) {
+async function messageCreate({channel = null, title = " ", description = " ", footer = " ", components = [], color = "#2E8B57", interaction = null}) {
     try {
         if(channel == null) throw new Error("No channel in Embed");
 
@@ -121,7 +121,7 @@ async function messageCreate({channel = null, title = " ", description = " ", fo
     }
 }
 
-async function messageEdit({message = null, title = " ", description = " ", footer = " ",  color = "#024a00", components = []}) {
+async function messageEdit({message = null, title = " ", description = " ", footer = " ",  color = "#2E8B57", components = []}) {
     try {
         if(message == null) throw new Error("No message in Embed");
 

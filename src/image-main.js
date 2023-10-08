@@ -55,11 +55,11 @@ async function make(json) {
 
   switch (quality) {
     case 1:
-      maxSize = 5;
+      maxSize = 10;
       quality = "Low";
       break;
     case 2:
-      maxSize = 4;
+      maxSize = 5;
       quality = "Average";
       break;
     case 3:
@@ -67,7 +67,7 @@ async function make(json) {
       quality = "High";
       break;
     default:
-      maxSize = 4;
+      maxSize = 5;
       quality = "Average";
   }
 
