@@ -151,7 +151,7 @@ client.on('guildMemberUpdate', async (oldMember, newmember) => {
             const embed = new EmbedBuilder();
             embed.setTitle("Thank you supporter!")
             embed.setAuthor({name: `Minecraft Image Bot`,url: config.webpageURL,iconURL: config.avatarURL})
-            embed.setDescription(`Thank you for your support! Without you, we'd have nothing. If you have any questions about your purchase, feel free to ask them within the https://discord.com/channels/740955634287116308/745651285944172615 channel.\n:warning:You **MUST** stay in Minecraft Image Bot server to keep your donor perks!:warning:`);
+            embed.setDescription(`Thank you for your support! Without you, we'd have nothing. If you have any questions about your purchase, feel free to ask them within the https://discord.com/channels/740955634287116308/745651285944172615 channel.\n:warning:You **MUST** stay in the Minecraft Image Bot server to keep your donor perks!:warning:`);
 
             await dm.send({embeds: [embed] });
 
