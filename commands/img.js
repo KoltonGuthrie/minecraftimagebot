@@ -4,7 +4,7 @@ const config = require("../config.json");
 const {interactionReply, interactionUpdate} = require('../src/embed');
 const img = require('../src/image-main')
 const upload = require("../src/upload");
-const { getUser, updateUser, addUser, getStatus, updateStatus } = require('../src/database');
+const { getUser, updateUser, addUser, getStatus, updateStatus, getDonor } = require('../src/database');
 
 const {SlashCommandBuilder} = require('@discordjs/builders');
 const fs = require('fs');
@@ -18,17 +18,23 @@ async function main(interaction, client) {
         const width = interaction.options.getInteger('width') || null;
         const height = interaction.options.getInteger('height') || null;
 
-        switch(quality) {
-            case 1:
-                delayTimer = 10000;
-                break;
-            case 2:
-                delayTimer = 20000;
-                break;
-            case 3:
-                delayTimer = 30000;
-                break;
-            default:
+        if(!(await getDonor({id: interaction.user.id}))) {// Not a donor
+
+            switch(quality) {
+                case 1:
+                    delayTimer = 10000;
+                    break;
+                case 2:
+                    delayTimer = 20000;
+                    break;
+                case 3:
+                    delayTimer = 30000;
+                    break;
+                default:
+            }
+            
+        } else {
+            delayTimer = 5000;
         }
 
         let downloadURL;
@@ -201,7 +207,7 @@ async function checkQueue(interaction, delayTimer) {
             s = Math.floor((((user.queueTime - new Date().getTime()) / 1000 / 60 / 60 - h) * 60 - m) * 60);
             time = `${m > 0 ? m + " minutes and " : ""}${s} seconds`;
 
-            interactionReply({interaction:interaction, description: `:x: This is on cooldown for ${time}.`})
+            interactionReply({interaction:interaction, description: `:x: This is on cooldown for ${time}.\n\n[donate](${config.donateURL}) to lower the cooldown time`})
             return 1;
 
         }

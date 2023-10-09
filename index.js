@@ -4,6 +4,8 @@ const fs = require("fs");
 const config = require(`${__dirname}/config.json`);
 const { updateStatus, init } = require("./src/database.js");
 
+const donorBot = require('./donorBot/index.js');
+
 let manager;
 (async() => {
   await init();

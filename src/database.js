@@ -67,6 +67,15 @@ async function init() {
             'queueTime' INTEGER NOT NULL
             );`
 	);
+
+	await db.run(
+		`CREATE TABLE IF NOT EXISTS 'donors'
+            (
+            'id' TEXT NOT NULL,
+			'tier' INTEGER NOT NULL,
+            'time' INTEGER NOT NULL
+            );`
+	);
 	await db.close();
 }
 
@@ -165,6 +174,42 @@ async function getStatus() {
     return row || null;
 }
 
+async function addDonor({ id, tier, time = (new Date().getTime()) }) {
+    if(!id || !tier) return null;
+	const db = await connect();
+
+	await db.run(`INSERT INTO donors(id, tier, time) VALUES(?,?,?);`,[id, tier, time]);
+	await db.close();
+
+	return await getDonor({id});
+}
+
+async function getDonor({ id }) {
+    if(!id) return null;
+	const db = await connect();
+	const row = await db.get(`SELECT * FROM donors WHERE id = ?;`, [id]);
+	await db.close();
+
+	return row || null;
+}
+
+async function getDonors() {
+	const db = await connect();
+    const rows = await db.all(`SELECT * FROM donors;`);
+	await db.close();
+
+	return rows || null;
+}
+
+async function removeDonor({ id }) {
+    if(!id) return null;
+	const db = await connect();
+    await db.run(`DELETE FROM donors WHERE id = ?;`,[id]);
+	await db.close();
+
+	return;
+}
+
 module.exports = {
-	init, updateImage, addImage, getImage, addUser, updateUser, getUser, updateStatus, getStatus, removeImage, getAllImages
+	init, updateImage, addImage, getImage, addUser, updateUser, getUser, updateStatus, getStatus, removeImage, getAllImages, addDonor, getDonor, getDonors, removeDonor
 }

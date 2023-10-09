@@ -130,7 +130,6 @@ let download = function(uri, filename, callback){ // download image function)
       )
       .catch((e) => {
         console.log(e);
-        resolve(0);
       });
 
   let imageName = downloadURL
