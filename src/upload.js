@@ -4,7 +4,8 @@ const FormData = require("form-data");
 const config = require('../config.json');
 const { interactionUpdate } = require("./embed");
 const { SlashCommandSubcommandBuilder } = require("@discordjs/builders");
-const { updateImage } = require("./database");
+const { updateImage, getDonor } = require("./database");
+const { getCommandPath } = require("./createMcCommand");
 
 async function uploadImg(json)
   {
@@ -126,8 +127,9 @@ async function uploadImg(json)
       return;
     }
 
+    let upload;
     try {
-      file = fs.createReadStream(path);
+      const file = fs.createReadStream(path);
 
       const form = new FormData();
       form.append("token", config.GOFILETOKEN);
@@ -159,6 +161,41 @@ async function uploadImg(json)
     await updateImage({id: specialID.toLowerCase().replace(/\-/g, ""), key: 'fileId', value: upload.data.data.fileId });
     await updateImage({id: specialID.toLowerCase().replace(/\-/g, ""), key: 'folderId', value: upload.data.data.parentFolder });
 
+    const user = await getDonor({id: interaction.user.id});
+
+    if(user) {
+      upload = undefined;
+      try {
+
+        const file = fs.createReadStream(await getCommandPath(specialID.toLowerCase().replace(/\-/g, "")));
+        
+        const form = new FormData();
+        form.append("token", config.GOFILETOKEN);
+        form.append("file", file);
+    
+        upload = await axios({
+          method: "post",
+          url: `https://${server.data.data.server}.gofile.io/uploadFile`,
+          data: form,
+          maxContentLength: Infinity,
+          maxBodyLength: Infinity,
+          headers: {
+            "content-type": `multipart/form-data; boundary=${form._boundary}`,
+          },
+        });
+
+      } catch(err) {
+        console.log(err);
+        await updateImage({id: specialID.toLowerCase().replace(/\-/g, ""), key: 'datapackLink', value: `failed` });
+      }
+
+      if(upload && upload.data.status === "ok") {
+        await updateImage({id: specialID.toLowerCase().replace(/\-/g, ""), key: 'datapackFolderId', value: upload.data.data.parentFolder });
+        await updateImage({id: specialID.toLowerCase().replace(/\-/g, ""), key: 'datapackLink', value: `https://gofile.io/d/${upload.data.data.code}` });
+      }
+
+    }
+
     //console.log(imgData)
 
     //console.log('Deleting after upload');
@@ -174,6 +211,7 @@ async function uploadImg(json)
   } else {
     // DISCORD UPLOAD END
     // 3RD PARTY UPLOAD START
+    let upload;
     try {
       try {
         server = await axios.get("https://api.gofile.io/getServer");
@@ -190,7 +228,7 @@ async function uploadImg(json)
         return;
       }
 
-      file = fs.createReadStream(path);
+      const file = fs.createReadStream(path);
 
       const form = new FormData();
       form.append("token", config.GOFILETOKEN);
@@ -224,6 +262,50 @@ async function uploadImg(json)
     await updateImage({id: specialID.toLowerCase().replace(/\-/g, ""), key: 'link', value: `https://gofile.io/d/${upload.data.data.code}` });
     await updateImage({id: specialID.toLowerCase().replace(/\-/g, ""), key: 'fileId', value: upload.data.data.fileId });
     await updateImage({id: specialID.toLowerCase().replace(/\-/g, ""), key: 'folderId', value: upload.data.data.parentFolder });
+
+    const user = await getDonor({id: interaction.user.id});
+
+    if(user) {
+      upload = undefined;
+      try {
+        try {
+          const file = fs.createReadStream(await getCommandPath(specialID.toLowerCase().replace(/\-/g, "")));
+          
+          const form = new FormData();
+          form.append("token", config.GOFILETOKEN);
+          form.append("file", file);
+      
+          upload = await axios({
+            method: "post",
+            url: `https://${server.data.data.server}.gofile.io/uploadFile`,
+            data: form,
+            maxContentLength: Infinity,
+            maxBodyLength: Infinity,
+            headers: {
+              "content-type": `multipart/form-data; boundary=${form._boundary}`,
+            },
+          });
+  
+        } catch(err) {
+          console.log(err);
+          await updateImage({id: specialID.toLowerCase().replace(/\-/g, ""), key: 'datapackLink', value: `failed` });
+        }
+  
+        if(upload && upload.data.status === "ok") {
+          await updateImage({id: specialID.toLowerCase().replace(/\-/g, ""), key: 'datapackFolderId', value: upload.data.data.parentFolder });
+          await updateImage({id: specialID.toLowerCase().replace(/\-/g, ""), key: 'datapackLink', value: `https://gofile.io/d/${upload.data.data.code}` });
+        }
+  
+      } catch(err) {
+        console.log(err);
+        await updateImage({id: specialID.toLowerCase().replace(/\-/g, ""), key: 'datapackLink', value: `failed` });
+      }
+
+      if(upload && upload.data.status === "ok") {
+        await updateImage({id: specialID.toLowerCase().replace(/\-/g, ""), key: 'datapackFolderId', value: upload.data.data.parentFolder });
+        await updateImage({id: specialID.toLowerCase().replace(/\-/g, ""), key: 'datapackLink', value: `https://gofile.io/d/${upload.data.data.code}` });
+      }
+    }
 
     let status;
         

@@ -41,6 +41,8 @@ async function init() {
             'fileId' TEXT,
             'folderId' TEXT,
             'blockData' TEXT
+			'datapackFolderId' TEXT,
+			'datapackLink' TEXT
             );`
 	);
 

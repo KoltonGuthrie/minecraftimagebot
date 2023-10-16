@@ -8,7 +8,7 @@ async function interactionReply({interaction = null, title = " ", description = 
         if(interaction == null) throw new Error("No interaction in Embed");
 
         if(interaction.replied == true) {
-            await interactionUpdate({interaction: interaction, title: title, description: description, fields: fields, footer: footer, color: color, ephemeral: ephemeral});
+            await interactionUpdate({interaction: interaction, title: title, description: description, url, fields: fields, footer: footer, color: color, ephemeral: ephemeral});
             return;
         }
 

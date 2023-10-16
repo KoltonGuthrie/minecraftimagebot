@@ -5,7 +5,7 @@ const { Image } = require("image-js");
 const axios = require("axios");
 const cp = require("child_process");
 const { interactionReply, interactionUpdate } = require("./embed");
-const { addImage, updateImage, updateUser, deleteImage } = require('./database');
+const { addImage, updateImage, updateUser, removeImage } = require('./database');
 
 var blockSize = 16;
 
@@ -71,7 +71,7 @@ async function make(json) {
       quality = "Average";
   }
 
-   await  getImage(
+   await getImage(
     { "interaction": interaction, "downloadURL": downloadURL, "quality": quality, "width": width, "height": height, "maxSize": maxSize, "specialID": specialID, "callback": callback }
     );
 }
@@ -149,6 +149,7 @@ let download = function(uri, filename, callback){ // download image function)
       if (status !== 1) {
         await sleep(1000);
         await interactionUpdate({interaction: interaction, description: `Failed to download image`});
+        await updateImage({id: specialID.toLowerCase().replace(/\-/g, ""), key: "link", value: "failed" });
         return;
       } else {
         //console.log('Done downloading.')
@@ -166,6 +167,7 @@ let download = function(uri, filename, callback){ // download image function)
     console.log(`[DOWNLOAD ERROR] ${e.toString()}`);
     await sleep(1000);
     await interactionUpdate({interaction: interaction, description: `Failed to download image`});
+    await updateImage({id: specialID.toLowerCase().replace(/\-/g, ""), key: "link", value: "failed" });
     return;
   }
 }
@@ -184,11 +186,6 @@ async function scanImage(json) {
   let callback = json.callback;
 
   let runs = 0;
-  let colors = JSON.parse(fs.readFileSync(`${__dirname}/savedBlocks.json`));
-
-  //console.log(pathURL)
-  let nearestColor = require("nearest-color").from(colors);
-
   let pixels = []; // make pixel array
 
   //mainImage = await Image.load(`${dirname}/colors.png`) // read imaage
@@ -208,7 +205,7 @@ async function scanImage(json) {
     } catch(e) {}
 
     await updateUser({id: interaction.user.id, key: 'queueTime', value: 0});
-    await deleteImage({id: specialID.toLowerCase().replace(/\-/g, "")});
+    await removeImage({id: specialID.toLowerCase().replace(/\-/g, "")});
     /*
     let queue = JSON.parse(fs.readFileSync(`${__dirname}/imgQueue.json`));
     queue[interaction.guild.id] = 0;
@@ -412,6 +409,7 @@ async function makeImage(json) {
   } catch (err) {
     console.error(err);
     await interactionUpdate({interaction: interaction, description: `Failed to convert image.`});
+    await updateImage({id: specialID.toLowerCase().replace(/\-/g, ""), key: "link", value: "failed" });
     return;
   }
 
