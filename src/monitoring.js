@@ -24,7 +24,7 @@ const image_command_usage = new client.Gauge({ name: 'image_command_usage', help
 const info_command_usage = new client.Gauge({ name: 'info_command_usage', help: 'Usage of the info command' });
 const remove_command_usage = new client.Gauge({ name: 'remove_command_usage', help: 'Usage of the remove command' });
 const stats_command_usage = new client.Gauge({ name: 'stats_command_usage', help: 'Usage of the stats command' });
-const generate_command_usage = new client.Gauge({ name: 'stats_command_usage', help: 'Usage of the generate command' });
+const generate_command_usage = new client.Gauge({ name: 'generate_command_usage', help: 'Usage of the generate command' });
 
 const download_command_delay = new client.Histogram({name: 'download_command_delay', help: 'Amount of delay for the download command', buckets: [0.1, 5, 15, 50, 100, 500] });
 const help_command_delay = new client.Histogram({name: 'help_command_delay', help: 'Amount of delay for the help command', buckets: [0.1, 5, 15, 50, 100, 500] });
@@ -32,7 +32,7 @@ const image_command_delay = new client.Histogram({name: 'image_command_delay', h
 const info_command_delay = new client.Histogram({name: 'info_command_delay', help: 'Amount of delay for the info command', buckets: [0.1, 5, 15, 50, 100, 500] });
 const remove_command_delay = new client.Histogram({name: 'remove_command_delay', help: 'Amount of delay for the remove command', buckets: [0.1, 5, 15, 50, 100, 500] });
 const stats_command_delay = new client.Histogram({name: 'stats_command_delay', help: 'Amount of delay for the stats command', buckets: [0.1, 5, 15, 50, 100, 500] });
-const generate_command_delay = new client.Histogram({name: 'stats_command_delay', help: 'Amount of delay for the generate command', buckets: [0.1, 5, 15, 50, 100, 500] });
+const generate_command_delay = new client.Histogram({name: 'generate_command_delay', help: 'Amount of delay for the generate command', buckets: [0.1, 5, 15, 50, 100, 500] });
 
 const process_cpu_usage = new client.Histogram({name: 'process_cpu_usage', help: 'cpu usage', buckets: [0.1, 15, 30, 50, 75, 100] });
 const process_rss_memory = new client.Histogram({name: 'process_rss_memory', help: 'rss memory usage', buckets: [0.1, 25, 75, 150, 300, 100] });
