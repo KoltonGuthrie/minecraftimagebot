@@ -10,9 +10,9 @@ async function main(interaction, client) {
 
         const id = interaction.options.getString('id').toLowerCase().replace(/\-| /g, "");
 
-        const donor = await getDonor({ id: interaction.user.id });
+        //const donor = await getDonor({ id: interaction.user.id });
 
-        if(!donor) return await interactionReply({interaction: interaction, url: config.generateExampleURL, description: `:x: Only a donor can use this command. Become a donor by donating [here](${config.donateURL})`});
+        //if(!donor) return await interactionReply({interaction: interaction, url: config.generateExampleURL, description: `:x: Only a donor can use this command. Become a donor by donating [here](${config.donateURL})`});
 
         const data = await getImage({ id: id });
 
@@ -28,7 +28,7 @@ async function main(interaction, client) {
                 return;
             }
 
-            await interactionReply({interaction: interaction, title: data.name + ".png", description: `[Datapack Download Link](${data.datapackLink})\n\nClick [here](${config.generateCommandTutorial}) for a tutorial on how to use this command`, color: '#3489eb', ephemeral: true });
+            await interactionReply({interaction: interaction, title: data.name + ".png", description: `[Datapack Download Link](${data.datapackLink})\n\nClick [here](${config.generateCommandTutorial}) for a tutorial on how to use this command\n\n"This command is available to all for a limited time. Become a donor [here](${config.donateURL}) to not lose access.`, color: '#3489eb', ephemeral: true });
             
             return;
         } else {

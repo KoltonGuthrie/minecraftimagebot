@@ -162,8 +162,8 @@ async function uploadImg(json)
     await updateImage({id: specialID.toLowerCase().replace(/\-/g, ""), key: 'folderId', value: upload.data.data.parentFolder });
 
     const user = await getDonor({id: interaction.user.id});
-
-    if(user) {
+    const ignore = true;
+    if(user || ignore) {
       upload = undefined;
       try {
 
@@ -265,7 +265,8 @@ async function uploadImg(json)
 
     const user = await getDonor({id: interaction.user.id});
 
-    if(user) {
+    const ignore = true;
+    if(user || ignore) {
       upload = undefined;
       try {
         try {

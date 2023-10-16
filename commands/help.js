@@ -11,6 +11,7 @@ async function main(interaction, client) {
         \n**Commands:**
         **/img file <FILE>** [low | average | high] [width] [height] - *Main command (Upload with file)*
         **/img url <LINK>** [low | average | high] [width] [height] - *Main command (Upload with link)*
+        **/generate <ID> ** - *Generate a datapack to load your image in Minecraft!*
         **/download <ID>** - *View your image without compression*
         **/remove <ID>** - *Remove image*
         **/support** - *Get the support link for me*
