@@ -28,7 +28,7 @@ async function main(interaction, client) {
                 return;
             }
 
-            await interactionReply({interaction: interaction, title: data.name + ".png", description: `[Datapack Download Link](${data.datapackLink})\n\nClick [here](${config.generateCommandTutorial}) for a tutorial on how to use this command\n\n"This command is available to all for a limited time. Become a donor [here](${config.donateURL}) to not lose access.`, color: '#3489eb', ephemeral: true });
+            await interactionReply({interaction: interaction, title: data.name + ".png", description: `[Datapack Download Link](${data.datapackLink})\n\nClick [here](${config.generateCommandTutorial}) for a tutorial on how to use this command\n\n*This command is available to all for a limited time. Become a donor [here](${config.donateURL}) to not lose access.*`, color: '#3489eb', ephemeral: true });
             
             return;
         } else {
