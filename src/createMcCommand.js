@@ -2,6 +2,9 @@ const fs = require('fs');
 const path = require('path');
 const zipper = require('zip-local');
 const { getImage } = require('./database');
+const util = require('util');
+const zlib = require('zlib');
+const inflate = util.promisify(zlib.inflate);
 
 const tempFolder = path.join(__dirname, "..", "tmp");
 
@@ -25,7 +28,7 @@ function createDatapackZip(id, commands) {
 async function getCommandPath(id) {
 	const commands = [];
 
-	const json = JSON.parse((await getImage({id: id})).blockData);
+	const json = JSON.parse( await inflate((await getImage({id: id})).blockData) );
 
 	commands.push(`gamerule maxCommandChainLength 999999999`);
 	commands.push(`tellraw @s [{"text":"Placing blocks... This could take a while...\\n","color":"green"},{"text":"It is recommended that you turn ", "color":"aqua"},{"text":"OFF", "bold":"true", "color":"red"},{"text":" Smooth Lighting","color":"aqua"},{"text":"\\nThis can be done from:","color":"aqua"},{"text":" Options > Video Settings > Smooth Lighting", "color":"gold"}]`);

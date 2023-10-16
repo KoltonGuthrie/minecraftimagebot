@@ -1,6 +1,9 @@
 const { AsyncDatabase } = require("promised-sqlite3");
 const fs = require('fs');
 const path = require("path");
+const util = require('util');
+const zlib = require('zlib');
+const deflate = util.promisify(zlib.deflate);
 
 const dir = `${__dirname}/../db`;
 const file = '/minecraft_image_bot_database.sqlite';
@@ -40,7 +43,7 @@ async function init() {
             'discordImgID' TEXT,
             'fileId' TEXT,
             'folderId' TEXT,
-            'blockData' TEXT
+            'blockData' BLOB
 			'datapackFolderId' TEXT,
 			'datapackLink' TEXT
             );`
@@ -85,6 +88,8 @@ async function updateImage({  id = '%', interaction = '%'  , key, value }) {
     if(!key || !value) return null;
     if(id === '%' && interaction === '%') return null;
 
+	if(key === 'blockData') value = await deflate(value);
+
 	const db = await connect();
     await db.run(`UPDATE images SET ${key} = ? WHERE id LIKE ? AND interaction LIKE ?;`,[value, id, interaction]);
 	await db.close();
@@ -93,6 +98,9 @@ async function updateImage({  id = '%', interaction = '%'  , key, value }) {
 }
 
 async function addImage({id, time, name, author, channel, interaction, link, discordImgID, fileId, folderId, blockData}) {
+
+	if(blockData) blockData = await deflate(blockData);
+
 	const db = await connect();
     await db.run(`INSERT INTO images(id, time, name, author, channel, interaction, link, discordImgID, fileId, folderId, blockData) VALUES(?,?,?,?,?,?,?,?,?,?,?);`,[id, time, name, author, channel, interaction, link, discordImgID, fileId, folderId, blockData]);
 	await db.close();
