@@ -195,10 +195,16 @@ client.on('interactionCreate', async interaction => {
 
 async function updateMonitoring() {
   try {
-    guildAmount = await client.guilds.cache.size;
+    //guildAmount = client.guilds.cache.size;
+    let guildAmount = await client.shard.fetchClientValues("guilds.cache.size");
+    guildAmount = await guildAmount.reduce((acc, guildAmount) => acc + guildAmount, 0);
     monitoringInstance.setGuilds(guildAmount);
 
-    userAmount = await client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0);
+    //userAmount = client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0);
+
+    let userAmount = await client.shard.broadcastEval((client) => client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0));
+
+    userAmount = userAmount.reduce((acc, userAmount) => acc + userAmount, 0);
 
     monitoringInstance.setMembers(userAmount);
   } catch(err) {

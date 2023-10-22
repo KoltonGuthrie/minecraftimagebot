@@ -7,3 +7,4 @@ tmp/
 logs.txt
 src/imgData.json
 src/imgQueue.json
+db/minecraft_image_bot_database.sqlite

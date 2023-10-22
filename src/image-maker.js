@@ -54,7 +54,7 @@ const { updateImage } = require(`${__dirname}/database.js`);
           height: mainImage.height,
           preserveAspectRatio: false,
         });
-        console.log('Resized width ' + blockSize)
+        //console.log('Resized width ' + blockSize)
       }
 
       if (mainImage.height % blockSize !== 0) {
@@ -63,15 +63,15 @@ const { updateImage } = require(`${__dirname}/database.js`);
           height: mainImage.height - (mainImage.height % blockSize),
           preserveAspectRatio: false,
         });
-        console.log('Resized height ' + blockSize)
+        //console.log('Resized height ' + blockSize)
       }
     } else {
-      console.log("[ERROR] Image is too small");
+      //console.log("[ERROR] Image is too small");
       process.send(["An error has occurred. Your image may be too small"]);
       return;
     }
   } else {
-    console.log("[ERROR] Image is too small");
+    //console.log("[ERROR] Image is too small");
     process.send(["An error has occurred. Your image may be too small"]);
     return;
   }
@@ -153,7 +153,7 @@ const { updateImage } = require(`${__dirname}/database.js`);
 
   end = new Date();
 
-  console.log(end.getTime() - start.getTime() + "ms\nRuns: " + runs);
+  //console.log(end.getTime() - start.getTime() + "ms\nRuns: " + runs);
 
   await mcImage.save(path);
 

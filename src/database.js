@@ -7,7 +7,7 @@ const deflate = util.promisify(zlib.deflate);
 
 const dir = `${__dirname}/../db`;
 const file = '/minecraft_image_bot_database.sqlite';
-console.log(dir, file);
+//console.log(dir, file);
 
 
 init();

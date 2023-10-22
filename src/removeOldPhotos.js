@@ -31,7 +31,7 @@ async function remove() {
         const el = data[i];
         //604800000
         if (!el.time || new Date().getTime() - el.time > 604800000) {
-          console.log("removing: " + el.id);
+          //console.log("removing: " + el.id);
   
             //////////////////////////////////////////////
             // Remove from Minecraft image bot Server Start  

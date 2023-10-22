@@ -21,7 +21,7 @@ async function uploadImg(json)
   async function f(client, { id, path }) {
     const channel = await client.channels.cache.get("770315195162951721");
     if (channel) {
-      console.log("Found channel");
+      //console.log("Found channel");
       try {
         const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
         const row = new ActionRowBuilder()
@@ -83,7 +83,7 @@ async function uploadImg(json)
   if (uploadTo === "discord") {
     // DISCORD UPLOAD START
     let status;
-    console.log("FIND");
+    //console.log("FIND");
     const result = await client.shard.broadcastEval(f, {
       context: { id: specialID, path: path },
     });

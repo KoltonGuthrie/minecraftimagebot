@@ -45,7 +45,7 @@ async function main(interaction, client) {
                 //console.log(`PING: ${sent.createdTimestamp - interaction.createdTimestamp}ms`);
                 // is start of link
                 const checkedUrl = await checkurl(url, 5000);
-                console.log(checkedUrl);
+                //console.log(checkedUrl);
                 if (checkedUrl.status !== 200 || !checkedUrl.type.startsWith("image/") || checkedUrl.type.startsWith("image/webp")) {
                     // not an image or error
                     return await interactionUpdate({
@@ -96,14 +96,14 @@ async function main(interaction, client) {
                 callback: async function (path, specialID, imageName) {
                   try {
                     let size = getFilesizeInMegaBytes(getFilesizeInBytes(path));
-                    console.log(`[MAKE] Done. Size: ${size}`);
+                    //console.log(`[MAKE] Done. Size: ${size}`);
           
                     if (size <= 7.9) {
                       uploadTo = "discord";
                     } else {
                       uploadTo = "3rdparty";
                     }
-                    console.log(`[UPLOAD] Uploading to: ${uploadTo}`);
+                    //console.log(`[UPLOAD] Uploading to: ${uploadTo}`);
           
                     await upload.uploadImg({
                       path: path,
@@ -113,7 +113,7 @@ async function main(interaction, client) {
                       imageName: imageName,
                       client: options.client,
                       callback: function (imageName, code) {
-                        console.log(`[DONE] Finished: ${imageName} | Failed to upload: ${code}`);
+                        //console.log(`[DONE] Finished: ${imageName} | Failed to upload: ${code}`);
                         return;
                       },
                     });
@@ -204,7 +204,7 @@ async function checkQueue(interaction, delayTimer) {
         if (user && user.queueTime > new Date().getTime()) {
             h = Math.floor((user.queueTime - new Date().getTime()) / 1000 / 60 / 60);
             m = Math.floor(((user.queueTime - new Date().getTime()) / 1000 / 60 / 60 - h) * 60);
-            s = Math.floor((((user.queueTime - new Date().getTime()) / 1000 / 60 / 60 - h) * 60 - m) * 60);
+            s = Math.ceil((((user.queueTime - new Date().getTime()) / 1000 / 60 / 60 - h) * 60 - m) * 60);
             time = `${m > 0 ? m + " minutes and " : ""}${s} seconds`;
 
             interactionReply({interaction:interaction, description: `:x: This is on cooldown for ${time}.\n\n[donate](${config.donateURL}) to lower the cooldown time`})

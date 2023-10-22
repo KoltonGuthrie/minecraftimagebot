@@ -114,7 +114,7 @@ let download = function(uri, filename, callback){ // download image function)
       .then(
         (response) =>
           new Promise((resolve) => {
-            console.log(response.data.headers);
+            //console.log(response.data.headers);
             if (
               !response.data.headers["content-type"].startsWith("image/") ||
               response.data.headers["content-type"].startsWith("image/webp")
@@ -401,7 +401,7 @@ async function makeImage(json) {
     if(msg?.description) {
       await interactionUpdate({"interaction": msg.interaction, "description": msg.description});
     } else {
-      console.log(msg);
+      //console.log(msg);
       await anothercallback(msg);
       return;
     }
