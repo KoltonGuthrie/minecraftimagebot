@@ -13,6 +13,7 @@ async function Ban(interaction, client) {
         const id = interaction.message.content.toLowerCase().replace(/\-/g, "");
         const user_id = (await getImage({id: id})).author;
         const author = (await getUser({id: user_id}));
+        let unableToSendDM = false;
       
         /*
         let warnsAndBans = JSON.parse(fs.readFileSync(`${__dirname}/blockedIDs.json`));
@@ -28,13 +29,20 @@ async function Ban(interaction, client) {
 
         const dm = await user.createDM();
 
+        try {
+
         await messageCreate({channel: dm, title: ":warning: -- BANNED -- :warning:", description: `You have been banned for breaking one of our rules. You can view our rules [here](https://minecraftimagebot.glitch.me/rules)\nIf you think that your ban was unfair you may contact us from our server: ${config.supportURL}`});
+        
+        } catch(err) {
+            unableToSendDM = true;
+            console.error(err);
+        }
 
         await updateUser({id: user_id, key: 'banned', value: 'true'});
         //blockedIDs.push(el.author);
         //fs.writeFileSync(`${__dirname}/blockedIDs.json`,JSON.stringify(warnsAndBans));
 
-        return await interactionReply({interaction: interaction, title: `🔨 ${user.tag} | ${user.id}`, description: `${user.tag} has been banned`, ephemeral: true})
+        return await interactionReply({interaction: interaction, title: `🔨 ${user.tag} | ${user.id}`, description: `${user.tag} has been banned${unableToSendDM ? "\n**Unable to send DM to user**" : ""}`, ephemeral: true})
 
     } catch(e) {
         throw e;
@@ -55,6 +63,7 @@ async function Warn(interaction, client) {
         const id = interaction.message.content.toLowerCase().replace(/\-/g, "");
         const user_id = (await getImage({id: id})).author;
         const author = (await getUser({id: user_id}));
+        let unableToSendDM = false;
       
         const user = await client.users.fetch(author.id);
 
@@ -64,13 +73,20 @@ async function Warn(interaction, client) {
 
         const dm = await user.createDM();
 
-        await messageCreate({channel: dm, title: ":warning: -- WARNING -- :warning:", description: `You have been warned for breaking one of our rules. You can view our rules [here](${config.rulesURL})\nAlthough it was determined that your violation was not severe enough for a ban, breaking one of these rules again may result in a ban.`});
+        try {
+
+            await messageCreate({channel: dm, title: ":warning: -- WARNING -- :warning:", description: `You have been warned for breaking one of our rules. You can view our rules [here](${config.rulesURL})\nAlthough it was determined that your violation was not severe enough for a ban, breaking one of these rules again may result in a ban.`});
+
+        } catch(err) {
+            unableToSendDM = true;
+            console.error(err);
+        }
 
         await updateUser({id: user_id, key: 'warned', value: 'true'});
         //warnedIDs.push(el.author);
         //fs.writeFileSync(`${__dirname}/blockedIDs.json`,JSON.stringify(warnsAndBans));
 
-        return await interactionReply({interaction: interaction, title: `⚠️ ${user.tag} | ${user.id}`, description: `${user.tag} has been warned`, ephemeral: true})
+        return await interactionReply({interaction: interaction, title: `⚠️ ${user.tag} | ${user.id}`, description: `${user.tag} has been warned${unableToSendDM ? "\n**Unable to send DM to user**" : ""}`, ephemeral: true})
 
     } catch(e) {
         throw e;

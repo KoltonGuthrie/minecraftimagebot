@@ -221,7 +221,9 @@ function initializeMonitoring(id) {
     });
 
     // Start the HTTP server which exposes the metrics on http://localhost:8000/metrics
-    server.listen(8000 + id);
+    const PORT = 8000 + id;
+    server.listen(PORT);
+    console.log("Listening to " + PORT)
     
     return {
         setGuilds: setGuilds,

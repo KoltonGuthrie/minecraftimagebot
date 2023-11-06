@@ -48,7 +48,7 @@ client.login(config.token).then(() => {
 const { AutoPoster } = require("topgg-autoposter");
 
 AutoPoster("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc0MDMwODgzOTI5NDgyODU3NSIsImJvdCI6dHJ1ZSwiaWF0IjoxNjAxMDY1OTQ3fQ._519gd3ZozkqoeiVwUb2MfsvpNo22PZo9eYwtqHPh8Y", client).on("posted", () => {
-  console.log("Posted stats to Top.gg!");
+  //console.log("Posted stats to Top.gg!");
 });
 
 // COMMANDS 
@@ -67,7 +67,6 @@ client.on("shardReady", async (id, unavailableGuilds) => {
 
     const Monitoring = require(`${__dirname}/src/monitoring.js`);
     monitoringInstance = Monitoring(id);
-    updateMonitoring();
     monitoringInstance.startClientHeartbeat(client);
     monitoringInstance.setShardCount(client.options.shardCount);
 
@@ -94,6 +93,8 @@ client.on("shardReady", async (id, unavailableGuilds) => {
 
       const updateStats = require(`${__dirname}/src/updateStats.js`);
       updateStats.start(client);
+
+      updateMonitoring();
 
     }
 });
@@ -197,16 +198,19 @@ async function updateMonitoring() {
   try {
     //guildAmount = client.guilds.cache.size;
     let guildAmount = await client.shard.fetchClientValues("guilds.cache.size");
-    guildAmount = await guildAmount.reduce((acc, guildAmount) => acc + guildAmount, 0);
+    guildAmount = await guildAmount.reduce((acc, guildCount) => acc + guildCount, 0);
     monitoringInstance.setGuilds(guildAmount);
 
     //userAmount = client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0);
 
-    let userAmount = await client.shard.broadcastEval((client) => client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0));
+    let userAmount = await client.shard.broadcastEval(c => c.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0));
 
-    userAmount = userAmount.reduce((acc, userAmount) => acc + userAmount, 0);
+    userAmount = userAmount.reduce((acc, memberCount) => acc + memberCount, 0);
 
     monitoringInstance.setMembers(userAmount);
+
+    //console.log(`G: ${guildAmount}, U:${userAmount}`);
+
   } catch(err) {
     console.error(err);
   }
