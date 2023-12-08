@@ -31,7 +31,7 @@ async function getCommandPath(id) {
 	const json = JSON.parse( await inflate((await getImage({id: id})).blockData) );
 
 	commands.push(`gamerule maxCommandChainLength 999999999`);
-	commands.push(`tellraw @s [{"text":"Placing blocks... This could take a while...\\n","color":"green"},{"text":"It is recommended that you turn ", "color":"aqua"},{"text":"OFF", "bold":"true", "color":"red"},{"text":" Smooth Lighting","color":"aqua"},{"text":"\\nThis can be done from:","color":"aqua"},{"text":" Options > Video Settings > Smooth Lighting", "color":"gold"}]`);
+	commands.push(`tellraw @s [{"text":"Placing blocks... This could take a while...\\n","color":"green"},{"text":"It is recommended that you turn ", "color":"aqua"},{"text":"OFF", "bold":true, "color":"red"},{"text":" Smooth Lighting","color":"aqua"},{"text":"\\nThis can be done from:","color":"aqua"},{"text":" Options > Video Settings > Smooth Lighting", "color":"gold"}]`);
 
 	for(block of json.blocks) {
 		commands.push(`setblock ~${block.pos.x} ~-1 ~${block.pos.y} dirt`);
