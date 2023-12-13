@@ -24,7 +24,7 @@ async function main(interaction, client) {
             }
 
             if (!data.blockData || data.datapackLink == undefined) {
-                await interactionReply({interaction: interaction, description: ":x: This image did not create a datapack file. Please regenerate the image"});
+                await interactionReply({interaction: interaction, description: ":x: This image did not create a datapack file or is still genorating it. Please wait and try again or recreate the image using the `/img` command"});
                 return;
             }
 
