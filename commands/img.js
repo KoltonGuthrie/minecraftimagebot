@@ -207,7 +207,11 @@ async function checkQueue(interaction, delayTimer) {
             s = Math.ceil((((user.queueTime - new Date().getTime()) / 1000 / 60 / 60 - h) * 60 - m) * 60);
             time = `${m > 0 ? m + " minutes and " : ""}${s} seconds`;
 
-            interactionReply({interaction:interaction, description: `:x: This is on cooldown for ${time}.\n\n[donate](${config.donateURL}) to lower the cooldown time`})
+            if(!(await getDonor({id: userID}))) { // Not a donor
+                interactionReply({interaction:interaction, description: `:x: This is on cooldown for ${time}.\n\n[donate](${config.donateURL}) to lower the cooldown time`});
+            } else {
+                interactionReply({interaction:interaction, description: `:x: This is on cooldown for ${time}.`});
+            }
             return 1;
 
         }

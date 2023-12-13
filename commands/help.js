@@ -2,9 +2,16 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const Discord = require('discord.js');
 const { interactionReply } = require("../src/embed");
 const config = require("../config.json");
+const { getDonor } = require('../src/database');
 
 async function main(interaction, client) {
     try {
+
+        const FREE_COOLDOWNS = {low: 10, average: 20, high: 5};
+        const DONOR_COOLDOWNS = {low: 5, average: 5, high: 5};
+
+        const ISDONOR = await getDonor({id: interaction.user.id});
+
         await interactionReply({interaction: interaction, description: `
         [Our Webpage](${config.webpageURL}) | [Invite Me](${config.inviteURL})
         \n<> - required, [] - optional
@@ -20,9 +27,9 @@ async function main(interaction, client) {
         \n**Info:**
         There are cooldowns whenever a picture is created.
         \n**Cooldowns:**
-        Low - **10** seconds
-        Average - **20** seconds
-        High - **30** seconds
+        Low - **${ISDONOR ? DONOR_COOLDOWNS.low : FREE_COOLDOWNS.low}** seconds
+        Average - **${ISDONOR ? DONOR_COOLDOWNS.average : FREE_COOLDOWNS.average}** seconds
+        High - **${ISDONOR ? DONOR_COOLDOWNS.high : FREE_COOLDOWNS.high}** seconds
         \n[Rules](${config.rulesURL}) | [TOS](${config.tosURL}) | [Support](${config.supportURL})`});
         //**/info <ID>** - *View info of image (used blocks)*
     } catch(e) {
