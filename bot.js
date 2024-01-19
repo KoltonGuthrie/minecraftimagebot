@@ -47,7 +47,7 @@ client.login(config.token).then(() => {
 
 const { AutoPoster } = require("topgg-autoposter");
 
-AutoPoster("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc0MDMwODgzOTI5NDgyODU3NSIsImJvdCI6dHJ1ZSwiaWF0IjoxNjAxMDY1OTQ3fQ._519gd3ZozkqoeiVwUb2MfsvpNo22PZo9eYwtqHPh8Y", client).on("posted", () => {
+AutoPoster(config.topggToken, client).on("posted", () => {
   //console.log("Posted stats to Top.gg!");
 });
 
@@ -308,7 +308,7 @@ client.on("guildCreate", async (guild) => {
     });
   
     const res = await axios.post(
-      "https://discord.com/api/webhooks/770445072797401108/F4G8VmDkiBuLtdCVRmk5i_jVow8t40FMnntltToFlHtDxGXQgWACKFgEv1k2I8vK7K5I",
+      config.discordLogWebhook,
       json,
       {
         headers: {
