@@ -12,6 +12,7 @@
     "@discordjs/builders": "^0.13.0-dev.1647259738.2297c2b",
     "@discordjs/rest": "^0.4.0-dev.1647259762.2297c2b",
     "abort-controller": "^3.0.0",
+    "archiver": "^7.0.1",
     "axios": "^0.26.1",
     "console-stamp": "^3.1.2",
     "cron": "^1.8.2",
@@ -27,7 +28,6 @@
     "pidusage": "^3.0.2",
     "prom-client": "^14.2.0",
     "promised-sqlite3": "^2.1.0",
-    "topgg-autoposter": "^2.0.1",
-    "zip-local": "^0.3.5"
+    "topgg-autoposter": "^2.0.1"
   }
 }

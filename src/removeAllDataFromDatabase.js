@@ -144,7 +144,7 @@ async function Delete(id, deleteFromDiscordAnd3rdPartyServers = true) {
                 if (el.link?.includes("https://gofile.io/d")) {
                 axios({
                     method: "delete",
-                    url: `https://api.gofile.io/deleteContent`,
+                    url: `https://api.gofile.io/contents`,
                     data: { contentsId: el?.folderId, token: config.GOFILETOKEN },
                 }).then(function (res) {
                     //console.log(res);
