@@ -8,7 +8,7 @@ const inflate = util.promisify(zlib.inflate);
 
 const tempFolder = path.join(__dirname, "..", "tmp");
 
-function createDatapackZip(id, commands) {
+async function createDatapackZip(id, commands) {
 	const welcome =
 		'tellraw @a ["",{"text":"                      Minecraft Image Generator","color":"gold","clickEvent":{"action":"open_url","value":"https://minecraftimagebot.glitch.me/"},"hoverEvent":{"action":"show_text","contents":[{"text":"Click to visit our website","color":"green"}]}},"\\n",{"text":"This feature is currently in ","color":"aqua"},{"text":"BETA","color":"red"},{"text":"!","color":"aqua"},"\\n",{"text":"If you run into any errors, please report them ","color":"aqua"},{"text":"here","underlined":true,"color":"gold","clickEvent":{"action":"open_url","value":"https://minecraftimagebot.glitch.me/support"},"hoverEvent":{"action":"show_text","contents":[{"text":"Click to visit our support page","color":"green"}]}},"\\n",{"text":"To generate your image, run the following command: ","color":"green"},{"text":"\\"/function image:create\\"","color":"gold","clickEvent":{"action":"run_command","value":"/function image:create"},"hoverEvent":{"action":"show_text","contents":[{"text":"Run command","color":"green"}]}},"\\n","\\n",{"text":"It is recommended that you do not run this in a world you care about. Images can take up a large amount of space and this process can not be undone.","bold":true,"color":"dark_red"}]\ngamerule maxCommandChainLength 999999999';
 
@@ -32,10 +32,26 @@ function createDatapackZip(id, commands) {
 	const archive = archiver("zip", { zlib: { level: 9 } });
 	const stream = fs.createWriteStream(saveTo);
 
-	archive.directory(folder, false).pipe(stream);
-	archive.finalize();
+	return new Promise((resolve, reject) => {
 
-	return saveTo;
+		stream.on('close', function() {
+			fs.rmSync(folder, { recursive: true, force: true });
+      		resolve(saveTo);
+		});
+
+		stream.on('error', err => {
+			reject(err);
+		});
+	  
+		archive.on('error', err => {
+			reject(err);
+		});
+
+		archive.directory(folder, false).pipe(stream);
+		archive.finalize();
+
+	});
+
 }
 
 async function getCommandPath(id) {
@@ -65,7 +81,7 @@ async function getCommandPath(id) {
 
 	commands.push(`tellraw @s {"text":"Done!","color":"green"}`);
 
-	return createDatapackZip(id, commands.join("\n"));
+	return await createDatapackZip(id, commands.join("\n"));
 }
 
 module.exports = {

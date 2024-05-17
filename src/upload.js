@@ -114,7 +114,7 @@ async function uploadImg(json)
 
     // UPLOAD TO 3RD PARTY
     try {
-      server = await axios.get("https://api.gofile.io/servers");
+      server = await axios.get("https://api.gofile.io/servers?zone=na");
       //console.log(server.data.data);
     } catch (e) {
       //console.log(e);
@@ -137,7 +137,7 @@ async function uploadImg(json)
 
       upload = await axios({
         method: "post",
-        url: `https://${server.data.data.server}.gofile.io/contents/uploadfile`,
+        url: `https://${server.data.data.servers[0].name}.gofile.io/contents/uploadfile`,
         data: form,
         maxContentLength: Infinity,
         maxBodyLength: Infinity,
@@ -175,7 +175,7 @@ async function uploadImg(json)
     
         upload = await axios({
           method: "post",
-          url: `https://${server.data.data.server}.gofile.io/contents/uploadfile`,
+          url: `https://${server.data.data.servers[0].name}.gofile.io/contents/uploadfile`,
           data: form,
           maxContentLength: Infinity,
           maxBodyLength: Infinity,
@@ -214,7 +214,7 @@ async function uploadImg(json)
     let upload;
     try {
       try {
-        server = await axios.get("https://api.gofile.io/servers");
+        server = await axios.get("https://api.gofile.io/servers?zone=na");
       } catch (e) {
         //console.log(e);
         failedUpload(specialID, path, interaction, callback);
@@ -236,7 +236,7 @@ async function uploadImg(json)
 
       upload = await axios({
         method: "post",
-        url: `https://${server.data.data.server}.gofile.io/contents/uploadfile`,
+        url: `https://${server.data.data.servers[0].name}.gofile.io/contents/uploadfile`,
         data: form,
         maxContentLength: Infinity,
         maxBodyLength: Infinity,
@@ -278,7 +278,7 @@ async function uploadImg(json)
       
           upload = await axios({
             method: "post",
-            url: `https://${server.data.data.server}.gofile.io/contents/uploadfile`,
+            url: `https://${server.data.data.servers[0].name}.gofile.io/contents/uploadfile`,
             data: form,
             maxContentLength: Infinity,
             maxBodyLength: Infinity,
